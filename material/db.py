@@ -16,7 +16,7 @@ def properties(Mat_n, freq, *args):
     # heterogeneous material.
     # ------------------------------------
     #   special case that call the program mst.py
-    #   to compute effective properties for an
+    #   to compute effective properties.
     # ------------------------------------
     if Mat_n in ['meta']:
         mat, inc = args[0], args[1]
@@ -26,18 +26,6 @@ def properties(Mat_n, freq, *args):
         try:    pola = args[5]
         except: pola = None
         (cL, cT, rhoL, rhoT, alphaL, alphaT) = homogeneousprop(freq, mat, inc, r=r, phi=phi, poly=poly, pola=pola)
-
-    # external material.
-    # ------------------------------------
-    #   an external program can use regex pattern 
-    #   to replace values and temporarily add a material
-    # ------------------------------------
-    elif Mat_n in [ None ]:
-        rhoL    =  None
-        cL      =  None
-        alphaL  =  None
-        cT      =  None
-        alphaT  =  None
 
     # ------------------------------------
     # the folowing material are homogenous
