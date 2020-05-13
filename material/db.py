@@ -57,16 +57,16 @@ def properties(Mat_n, freq, *args):
         ### cf Onda_Solids ("Steel - mild")
         rhoL    =  7.8
         cL      =  5.9
-        alphaL  =  0.0 * freq
+        alphaL  =  0.0
         cT      =  3.2
-        alphaT  =  0.0 * freq
+        alphaT  =  0.0
     elif Mat_n in ['aluminium', 'alu', 'aluminum']:
         ### cf Onda_Solids ("Steel - mild")
         rhoL    =  2.7
         cL      =  6.32
-        alphaL  =  0.0 * freq
+        alphaL  =  0.0
         cT      =  3.13
-        alphaT  =  0.0 * freq
+        alphaT  =  0.0
     elif Mat_n in ['Silicone_poreux', 'PDMS_poreux', 'PDMS', 'billes', 'panama_billes']:
         rhoL    =  0.70 # valeur romain
         cL      =  0.2+0.1*freq # mesure acoustique
@@ -74,12 +74,16 @@ def properties(Mat_n, freq, *args):
         # ??? supposition !!!
         cT      =  0.05
         alphaT  =  18 * alphaL
+    else:
+        missing_material_warning(Mat_n)
+
 
     ###################################################################
     # LIST OF USER'S MATERIALS
     # ------------------------------------
     #   just copy pas the pattern of code.
     #   It needs at least the entries rhoL, cL, alphaL, cT and alphaT
+    # ------------------------------------
     # elif Mat_n in [ 'material_name' ]:
     #     rhoL    = 0
     #     cL      = 0
@@ -93,3 +97,4 @@ def properties(Mat_n, freq, *args):
         rhoT=rhoL
 
     return formatprop(Mat_n, freq, cL, cT, rhoL, rhoT, alphaL, alphaT)
+    # return cL, cT, rhoL, rhoT, alphaL, alphaT

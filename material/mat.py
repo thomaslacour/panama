@@ -6,22 +6,26 @@ def freqformat(freq):
     Manage the right format for frequency input (scalar or vector)
     return an array every time of size (1,) or (N,).
     """
-    if type(freq) is np.ndarray:
-        pass
-    elif type(freq) is list:
+
+    if type(freq) is list:
         freq=np.array(freq)
-    elif type(freq) in  [int, float]:
-        freq=np.array([freq])
+    elif type(freq) in  [int, float, np.float64]:
+        # freq = np.array( (freq,) )
+        freq = [ freq ]
+
+    if type(freq) is np.ndarray:
+        freq[freq==0]=None
 
     # avoid 0 freq
-    freq = freq[freq!=0]
+    # freq = freq[freq!=0]
+    # freq[freq==0]=1e-6
 
     # avoid empty shape (0,)
-    if freq.shape==(0,):
-        return 0
+    # if freq.shape==(0,):
+    #     return 0
     # avoid shape (1,)
-    elif freq.shape==(1,):
-        return freq[0]
+    # elif freq.shape==(1,):
+    #     return freq[0]
 
     return freq
 
@@ -33,8 +37,8 @@ def initprop(freq, Mat_n, Inc_n, pola, **kwargs):
     """
     freq = freqformat(freq)
 
-    # # avoid zero frequency for computation
-    freq = freq[ freq!=0 ]
+#     # # avoid zero frequency for computation
+#     freq = freq[ freq!=0 ]
 
     # material properties
     cL0, cT0, rhoL0, rhoT0, alphaL0, alphaT0 = db.properties(Mat_n, freq)
@@ -50,8 +54,27 @@ def initprop(freq, Mat_n, Inc_n, pola, **kwargs):
     return freq, rho0, lambda0, mu0, rho1, lambda1, mu1
 
 
+
+def missing_material_warning(Mat_n):
+    print('WARNING : Material named \'{}\' not found in db.'.format(Mat_n))
+    try:
+        import sys, re, os
+        path = os.getcwd() + '/material/db.py'
+        print('Please add it to the database {}, or choose it within the following list :\n' . format(path))
+        with open(path, 'r') as file: data = file.read()
+        [ print(i) for i in re.findall(r'[M]at_n in (.*):', data)[:-1] ]
+    except:
+        pass
+    finally:
+        sys.exit(0)
+    return
+
+
+
 def formatprop(Mat_n, freq, cL=None, cT=None, rhoL=None, rhoT=None, alphaL=None, alphaT=None):
-    u = 0*freq + 1
+    u = np.ones( (len(freq),) )
+    if len(u) == 1: u = 1
+
     try:
         return (cL*u, cT*u, rhoL*u, rhoT*u, alphaL*u, alphaT*u)
         # if not 'rhoT' in locals() :

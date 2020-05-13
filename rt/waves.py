@@ -57,7 +57,7 @@ def transfert_matrix_1layer(omega, s1, d, CL, CT, rhoL, rhoT, alphaL, alphaT):
     return Xi @ phase_matrix @ npl.inv(Xi)
 
 
-# on vire les milieux externes.
+#TODO: on vire les milieux externes le test doit être fait en dehors !
 def transfert_matrix(omega, s1, unit_cells, d, CL, CT, rhoL, rhoT, alphaL, alphaT):
     """
     TRANSFERT MATRIX
