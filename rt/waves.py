@@ -177,6 +177,9 @@ def partial_wave(type):
     return list, ind
 
 
+# def scattering_matrix()
+
+
 def scattering_matrix(omega, s1, unit_cells, d, CL, CT, rhoL, rhoT=None, alphaL=None, alphaT=None):
     """
     SCATTERING MATRIX relating converging waves to diverging ones.
@@ -206,6 +209,7 @@ def scattering_matrix(omega, s1, unit_cells, d, CL, CT, rhoL, rhoT=None, alphaL=
 
     Xi = []
 
+    # TODO: sortir le calcul du vecteur d'état ?
     for i in (0, -1):
         c_     = {'L':CL[i], 'T':CT[i]}
         alpha_ = {'L':CL[i], 'T':CT[i]}
