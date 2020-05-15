@@ -20,6 +20,7 @@ Description
 
 L'architecture du code de calcul est la suivante.
 
+```console
     src/
     ├ material/
     ├ mst/
@@ -32,6 +33,7 @@ L'architecture du code de calcul est la suivante.
     │   └ waves.py
     ├ main.py
     └ conf.txt
+```
 
 Le fichier `main.py` est le programme principal à exécuter avec python.
 
@@ -46,11 +48,13 @@ Configuration
 
 La configuration choisie est défini dans le fichier texte `conf.txt` se trouvant obligatoirement à la racine du répertoire. La syntaxe du fichier de configuration est la suivante :
 
-   # commentaire1
-   parametre1=valeur1
-   parametre2=valeur2
-   # commentaire2
-   parametre3=valeur3
+```console
+    # commentaire1
+    parametre1=valeur1
+    parametre2=valeur2
+    # commentaire2
+    parametre3=valeur3
+```
 
 Toute ligne commençant par `#` est considérée comme un commentaire et ne sera pas interprétée par le programme.
 
@@ -60,27 +64,33 @@ Les unités possibles pour les paramètres sont un seul choix parmi : (MHz, mm e
 
 Les différentes épaisseurs du multicouche sont précisées les unes à la suite des autres avec la syntaxe suivante (cas d'un milieu homogène) :
 
+```console
    layer#1 = {nom_du_materiaux1: épaisseur 1}
    layer#2 = {nom_du_materiaux2: épaisseur 2}
    ...
    layer#N = {nom_du_materiauxN: épaisseur N}
+```
 
 Dans le cas d'un milieu hétérogène, les propriétés effectives seront calculées avec le code d'homogénéisation "mst". Le nom du matériau est obligatoirement "meta" et la syntaxe à respecter est la suivante :
 
+```console
    layer#3 = {meta: épaisseur, Mat: matrice, Inc: inclusion, rmean: rayon, phi: fraction_volumique_en_%, poly: polydispersité_en_%}
+```
 
 Les valeurs "matrice" et "inclusion" sont des chaînes de caractères, "rayon" est un nombre.
 
 Les matériaux disponibles par défaut sont :
 
-   alu, eau, PU, air, acier ou Silicone_poreux.
+> alu, eau, PU, air, acier ou Silicone_poreux.
 
 Leurs propriétés sont définies dans le fichier `db.py`.
 
 Les milieux extérieurs sont définis selon la syntaxe suivante (les milieux amont et aval étant respectivement les milieux gauche et droite)
 
+```console
    halfspace_left  = nom_du_milieu_à_gauche
    halfspace_right = nom_du_milieu_à_droite
+```
 
 Les noms doivent être choisis parmi la liste des matériaux disponibles (définie dans le fichier `db.py`).
 
@@ -88,6 +98,7 @@ Les noms doivent être choisis parmi la liste des matériaux disponibles (défin
 
 Deux ensembles de paramètres doivent être précisés : les paramètres fréquentiels et les paramètres pour l'angle d'incidence. Les instructions susceptibles d'être renseignées sont les suivantes :
 
+```console
    f_min     = nombre
    f_max     = nombre
    f_fix     = nombre
@@ -96,6 +107,7 @@ Deux ensembles de paramètres doivent être précisés : les paramètres fréque
    theta_max = nombre
    theta_fix = nombre
    theta_num = nombre
+```
 
 Selon le calcul demandé, tous les paramètres ne sont pas nécessaires (voir exemple). Pour calculer les valeurs des coefficients R et/ou T en incidence normale, seul "theta\_fix" est requis avec "f\_min", "f\_max" et "f\_num".
 
@@ -104,7 +116,9 @@ Actions
 
 Un seul choix est possible parmi différentes actions. La syntaxe est alors la suivante :
 
+```console
    todo = action
+```
 
 La valeur "action" peut être un nombre ou une suite de plusieurs caractères. L'ensemble des actions possibles est implémenté dans le fichier "rt.py" (voir architecture). Les actions possibles sont :
 
@@ -121,6 +135,7 @@ Examples
 
 Pour calculer le coefficient de transmission et le coefficient de réflexion d'un bicouche en incidence normale en fonction de la fréquence, le fichier de configuration contiendra les instructions :
 
+```console
    # -- begin of config file -- #
    layer#1 = {meta: 2, Mat: PU, Inc: air, rmean: 0.02, phi: 3, poly: 10}
    layer#2 = {steel: 2}
@@ -132,6 +147,7 @@ Pour calculer le coefficient de transmission et le coefficient de réflexion d'u
    theta_fix=0
    todo=0
    # -- end of config file -- #
+```
 
 Author
 ------
