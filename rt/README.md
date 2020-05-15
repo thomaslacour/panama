@@ -9,15 +9,18 @@ python rt.py
 Dependence
 ----------
 
-Les modules pythons standards suivants sont requis : - matplotlib, numpy, scipy, cmath, re, csv, pandas
+Les modules pythons standards suivants sont requis : 
 
-Les modules non standards suivants sont requis : - mst, material
+- matplotlib, numpy, scipy, cmath, re, csv, pandas
+
+Les modules non standards suivants sont requis : 
+
+- mst, material
 
 Description
 -----------
 
 `rt.py` calcule le coefficient de transmission (T) et le coefficient de réflexion (R) d'une plaque entre deux milieux, en utilisant le formalisme des matrices de transfert.
-
 L'architecture du code de calcul est la suivante.
 
 ```
@@ -36,11 +39,8 @@ src/
 ```
 
 Le fichier `main.py` est le programme principal à exécuter avec python.
-
 La configuration est spécifiée dans le fichier texte `conf.txt`.
-
 Le code de calcul s'appuie sur l'utilisation de la base de données de matériaux "db.py" du module `material` ainsi que sur le module "mst" ("multiple scattering theory") pour le calcul des propriétés dynamiques effectives d'un milieu hétérogène.
-
 L'exécution du code produit un fichier `data.csv` contenant les résultats de la simulation sous la forme d'un tableau.
 
 Configuration
@@ -58,7 +58,11 @@ parametre3=valeur3
 
 Toute ligne commençant par `#` est considérée comme un commentaire et ne sera pas interprétée par le programme.
 
-Les unités possibles pour les paramètres sont un seul choix parmi : (MHz, mm et µs) ou (kHz, m et ms) ou (Hz, km et s)
+Les unités possibles pour les paramètres sont un seul choix parmi : 
+
+- MHz, mm et µs
+- kHz, m et ms
+- Hz, km et s
 
 ### Layers properties
 
@@ -84,7 +88,6 @@ Les matériaux disponibles par défaut sont :
 > alu, eau, PU, air, acier ou Silicone_poreux.
 
 Leurs propriétés sont définies dans le fichier `db.py`.
-
 Les milieux extérieurs sont définis selon la syntaxe suivante (les milieux amont et aval étant respectivement les milieux gauche et droite)
 
 ```
