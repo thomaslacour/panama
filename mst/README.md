@@ -20,7 +20,7 @@ These python packages are required:
 
 If they are not already installed, you should install them with the command
 
-   python3 -m pip install --user matplotlib numpy pandas cmat mat re csv
+      python3 -m pip install --user matplotlib numpy pandas cmat mat re csv
 
 Description
 -----------
@@ -48,7 +48,7 @@ Bugs
 
 ...
 
-Author
+Authors
 ------
 
 [Thomas Lacour], [Olivier Poncelet]
