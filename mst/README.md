@@ -1,24 +1,28 @@
 NAME
 ----
 
-      mst.py - propriétés effectives d'un milieu inclusionnaire.
+mst.py - compute the effective properties of a heterogeneous material.
 
 SYNOPSIS
 --------
 
-      python mst.py
+> python3 mst.py
 
 DEPENDENCE
 ----------
 
-      Les modules pythons standards suivants sont requis :
-      - matplotlib, numpy, math, cmath, re, csv, pandas
+These python packages are required:
 
-      Les modules non standards suivants sont requis :
-      - material
+- matplotlib, numpy, math, cmath, re, csv, pandas
+
+If they are not already installed, you should install them with the command
+
+> python3 -m pip install --user matplotlib numpy pandas cmat mat re csv
 
 DESCRIPTION
 -----------
+
+The MST module has the following folder architecture:
 
       src/
       ├ material/
@@ -29,13 +33,12 @@ DESCRIPTION
       │   └ special.py
       └ mst.py
 
-      L'éxecution du code produira un fichier "mst.csv"
-      contenant les résultats de la simulation sous la forme d'un tableau.
+After its execution, the python script `mst.py` will return a file named `mst.csv` where the output is stored.
 
 SEE ALSO
 --------
 
-      rt.py
+> rt.py
 
 BUGS
 ----
