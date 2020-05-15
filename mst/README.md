@@ -1,5 +1,3 @@
-Name
-----
 
 mst.py - compute the effective properties of a heterogeneous material.
 
@@ -27,14 +25,14 @@ Description
 
 The MST module has the following folder architecture:
 
-      src/
-      ├ material/
-      ├ mst/
-      │   ├ calculKeff.py
-      │   ├ calculScatteringCoeffSn.py
-      │   ├ display.py
-      │   └ special.py
-      └ mst.py
+   src/
+   ├ material/
+   ├ mst/
+   │   ├ calculKeff.py
+   │   ├ calculScatteringCoeffSn.py
+   │   ├ display.py
+   │   └ special.py
+   └ mst.py
 
 After its execution, the python script `mst.py` will return a file named `mst.csv` where the output is stored.
 
