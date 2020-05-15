@@ -1,25 +1,28 @@
-NAME
+Name
 ----
 
 mst.py - compute the effective properties of a heterogeneous material.
 
-SYNOPSIS
+Synopsis
 --------
 
-> python3 mst.py
+   python3 mst.py
 
-DEPENDENCE
+Dependence
 ----------
 
 These python packages are required:
 
 - matplotlib, numpy, math, cmath, re, csv, pandas
 
+
+### Installation of dependences
+
 If they are not already installed, you should install them with the command
 
-> python3 -m pip install --user matplotlib numpy pandas cmat mat re csv
+   python3 -m pip install --user matplotlib numpy pandas cmat mat re csv
 
-DESCRIPTION
+Description
 -----------
 
 The MST module has the following folder architecture:
@@ -35,17 +38,17 @@ The MST module has the following folder architecture:
 
 After its execution, the python script `mst.py` will return a file named `mst.csv` where the output is stored.
 
-SEE ALSO
+See also
 --------
 
 > rt.py
 
-BUGS
+Bugs
 ----
 
 ...
 
-AUTHOR
+Author
 ------
 
 [Thomas Lacour], [Olivier Poncelet]
