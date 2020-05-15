@@ -20,7 +20,7 @@ Description
 
 L'architecture du code de calcul est la suivante.
 
-```console
+```
     src/
     ├ material/
     ├ mst/
@@ -48,7 +48,7 @@ Configuration
 
 La configuration choisie est défini dans le fichier texte `conf.txt` se trouvant obligatoirement à la racine du répertoire. La syntaxe du fichier de configuration est la suivante :
 
-```console
+```
     # commentaire1
     parametre1=valeur1
     parametre2=valeur2
@@ -64,7 +64,7 @@ Les unités possibles pour les paramètres sont un seul choix parmi : (MHz, mm e
 
 Les différentes épaisseurs du multicouche sont précisées les unes à la suite des autres avec la syntaxe suivante (cas d'un milieu homogène) :
 
-```console
+```
    layer#1 = {nom_du_materiaux1: épaisseur 1}
    layer#2 = {nom_du_materiaux2: épaisseur 2}
    ...
@@ -73,7 +73,7 @@ Les différentes épaisseurs du multicouche sont précisées les unes à la suit
 
 Dans le cas d'un milieu hétérogène, les propriétés effectives seront calculées avec le code d'homogénéisation "mst". Le nom du matériau est obligatoirement "meta" et la syntaxe à respecter est la suivante :
 
-```console
+```
    layer#3 = {meta: épaisseur, Mat: matrice, Inc: inclusion, rmean: rayon, phi: fraction_volumique_en_%, poly: polydispersité_en_%}
 ```
 
@@ -87,7 +87,7 @@ Leurs propriétés sont définies dans le fichier `db.py`.
 
 Les milieux extérieurs sont définis selon la syntaxe suivante (les milieux amont et aval étant respectivement les milieux gauche et droite)
 
-```console
+```
    halfspace_left  = nom_du_milieu_à_gauche
    halfspace_right = nom_du_milieu_à_droite
 ```
@@ -98,7 +98,7 @@ Les noms doivent être choisis parmi la liste des matériaux disponibles (défin
 
 Deux ensembles de paramètres doivent être précisés : les paramètres fréquentiels et les paramètres pour l'angle d'incidence. Les instructions susceptibles d'être renseignées sont les suivantes :
 
-```console
+```
    f_min     = nombre
    f_max     = nombre
    f_fix     = nombre
@@ -116,7 +116,7 @@ Actions
 
 Un seul choix est possible parmi différentes actions. La syntaxe est alors la suivante :
 
-```console
+```
    todo = action
 ```
 
@@ -135,7 +135,7 @@ Examples
 
 Pour calculer le coefficient de transmission et le coefficient de réflexion d'un bicouche en incidence normale en fonction de la fréquence, le fichier de configuration contiendra les instructions :
 
-```console
+```
    # -- begin of config file -- #
    layer#1 = {meta: 2, Mat: PU, Inc: air, rmean: 0.02, phi: 3, poly: 10}
    layer#2 = {steel: 2}
