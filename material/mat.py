@@ -11,21 +11,11 @@ def freqformat(freq):
         freq=np.array(freq)
     elif type(freq) in  [int, float, np.float64]:
         # freq = np.array( (freq,) )
-        freq = [ freq ]
+        # freq = freq
+        pass
 
     if type(freq) is np.ndarray:
         freq[freq==0]=None
-
-    # avoid 0 freq
-    # freq = freq[freq!=0]
-    # freq[freq==0]=1e-6
-
-    # avoid empty shape (0,)
-    # if freq.shape==(0,):
-    #     return 0
-    # avoid shape (1,)
-    # elif freq.shape==(1,):
-    #     return freq[0]
 
     return freq
 
@@ -35,7 +25,6 @@ def initprop(freq, Mat_n, Inc_n, pola, **kwargs):
     lamé coefficient) and mu (second lamé coefficient).
     Also return the right format for "freq"
     """
-    freq = freqformat(freq)
 
 #     # # avoid zero frequency for computation
 #     freq = freq[ freq!=0 ]
@@ -51,7 +40,7 @@ def initprop(freq, Mat_n, Inc_n, pola, **kwargs):
     if   pola=='L': rho0,rho1=rhoL0,rhoL1
     elif pola=='T': rho0,rho1=rhoT0,rhoT1
 
-    return freq, rho0, lambda0, mu0, rho1, lambda1, mu1
+    return rho0, lambda0, mu0, rho1, lambda1, mu1
 
 
 
@@ -72,8 +61,10 @@ def missing_material_warning(Mat_n):
 
 
 def formatprop(Mat_n, freq, cL=None, cT=None, rhoL=None, rhoT=None, alphaL=None, alphaT=None):
-    u = np.ones( (len(freq),) )
-    if len(u) == 1: u = 1
+
+    u = freq
+    if type(u) == list and len(u) == 1: u = 1
+    if type(u) == np.ndarray: u = np.ones( u.shape )
 
     try:
         return (cL*u, cT*u, rhoL*u, rhoT*u, alphaL*u, alphaT*u)
