@@ -42,7 +42,8 @@ def read(filename, v=0):
 
 
 def process_config(data):
-    """
+    """ Raw data parser
+    This function allows communication between computation and raw data.
     """
     from rt import display
     from rt import validation
@@ -58,33 +59,24 @@ def process_config(data):
     except:
         pass
 
-    csv_name="data"
-    csv_field={}
-
     if do == -1:   #validation tests
-        fRT = [ abs(u) for u in validation.test_1layer_NormalIncidence(data) ]
-        aRT = [ abs(u) for u in validation.test_1layer_Angle(data) ]
-        csv_field = [*fRT, *aRT]
-        data['todo'] = -1
+        validation.test_1layer_NormalIncidence(data)
+        validation.test_1layer_Angle(data)
+        # fRT = [ abs(u) for u in validation.test_1layer_NormalIncidence(data) ]
+        # aRT = [ abs(u) for u in validation.test_1layer_Angle(data) ]
+        # csv_field = [*fRT, *aRT]
+        # data['todo'] = -1
 
     elif do == 0:   #RT versus omega
-        x, R, T, ax1 = display.rt_panama(data, plot_vs='frequency')
-        lab = 'frequency (MHz)'
-        csv_field = {"freq_MHz":x, "abs_R":np.abs(R), "abs_T":np.abs(T)}
-        # csv_name = "rt_theta" + str(data["theta_fix"]) + "_"
+        freq, R, T = display.rt_versus_omega(data)
+        return {"freq_MHz":freq, "abs_R":R, "abs_T":T}
 
     elif do == 1:   #RT versus angle
-        x, R, T, ax1 = display.rt_panama(data, plot_vs='angle')
-        lab = 'angle (°)'
-        csv_field = {"angle_deg":x, "abs_R":np.abs(R), "abs_T":np.abs(T)}
-        # csv_name = "rt_freq" + str(data["f_fix"]) + "_"
+        theta, R, T = display.rt_versus_theta(data)
+        return {"angle_deg":theta, "abs_R":np.abs(R), "abs_T":np.abs(T)}
 
     elif do == 2:   #RT versus angle and frequency
-        x, R, T, ax1 = display.rt_panama(data, plot_vs='angle_and_frequency')
-        R = np.abs(R.reshape(np.size(R)))
-        T = np.abs(T.reshape(np.size(T)))
-        csv_field = { "angle_deg":x[1], "freq_MHz":x[2], "abs_R":R, "abs_T":T }
-        # csv_name = "rt_"
+        pass
 
     elif do == 3:   #transfert matrix versus frequency
         display.transfert_matrix_versus_omega(data)
@@ -103,14 +95,14 @@ def process_config(data):
     else:
         print("Unable to find the action to execute.")
 
-    return (csv_field, csv_name)
+    return
 
 
 
 
 def save_as_csv(things, csvfile):
     """
-    Pandas module lets you save a things to a csv file.
+    Pandas module lets you save a "things" to a csv file.
     If the things is a dict, the row header are dict keys.
     Otherwise, list is save without header.
     /!\ remark: datas are formated with 5 digits.

@@ -15,7 +15,7 @@ def freqformat(freq):
         pass
 
     if type(freq) is np.ndarray:
-        freq[freq==0]=None
+        freq[freq==0]=1e-9
 
     return freq
 

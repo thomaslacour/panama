@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 import math as m
 
 from . import waves as waves
+from rt import coefficients as compute
 
 from material import db as mat
 
-# TODO: deplacer cette fonction hors du module display et
-#       externaliser le calcul de propriété meta pour un
-#       vecteur fréquence complet.
+
 def init_lp(data, **kwargs):
     """
     Initialization of layer properties.
@@ -61,7 +60,7 @@ def matrix_dim(CT):
         return 4
 
 
-def transfert_matrix_versus_omega(data):# {{{
+def transfert_matrix_versus_omega(data): # OP
     f = np.linspace(data['f_min'],data['f_max'],data['f_num'])
     f = f[ f!=0 ]
     lp = init_lp(data, omega=2*np.pi*f[0])
@@ -80,10 +79,10 @@ def transfert_matrix_versus_omega(data):# {{{
         for j in range(N):
             axs[i,j].plot(f,np.real(M[i,j,:]),color='blue')
             axs[i,j].plot(f,np.imag(M[i,j,:]),color='red')
-    plt.tight_layout()# }}}
+    plt.tight_layout()
 
 
-def scattering_matrix_versus_omega(data):# {{{
+def scattering_matrix_versus_omega(data): # OP
     f = np.linspace(data['f_min'],data['f_max'],data['f_num'])
     f = f[ f!=0 ]
     lp = init_lp(data, omega=2*np.pi*f[0])
@@ -122,98 +121,67 @@ def scattering_matrix_versus_omega(data):# {{{
 
     pad, w_pad, h_pad = 1.5, 0.05, 0.05
     fig1.tight_layout(pad=pad, w_pad=w_pad, h_pad=h_pad)
-    fig2.tight_layout(pad=pad, w_pad=w_pad, h_pad=h_pad)# }}}
+    fig2.tight_layout(pad=pad, w_pad=w_pad, h_pad=h_pad)
 
 
-def rt_panama(data, plot_vs, phase=False):# {{{
-    """
-    REFLEXION/TRANSMISSION COEFFICIENTs
-    """
 
-    print('coeff vs {}' . format(plot_vs))
-    print(data)
+def rt_versus_omega(data):
+    freq_vec     = np.linspace(data['f_min'], data['f_max'], data['f_num'])
+    theta        = [ data['theta_fix'] ]
+    left         = (data['halfspace_left'], None) # None thickness
+    right        = (data['halfspace_right'], None) # None thickness
+    lay          = list(data['layers'].values()) # unpacked layers configuration
+    stack_config = [left, *lay, right]
+    stack_list   = compute.stacks(freq_vec, stack_config) # make a stack
+    R, T = compute.rt(freq_vec, theta, stack_list , pola='LL')
+    fig, ax = plot1d(freq_vec, R, T, phase=False)
+    plt.xlabel('frequency (MHz)', fontsize=12)
+    title = get_infos_for_title(data)
+    fig.suptitle(title, fontsize=14, fontweight='bold')
 
-    # initialize frequency vector
-    try:    f = np.linspace(data['f_min'], data['f_max'], data['f_num'])
-    except: f = np.linspace(0, 1, 101)
-    f[f==0]=0.0001
-    #TODO voir pour retourner la matrice identité
-    # f = f[ f!=0 ]
-
-    # initialize angle vector
-    try:    t = np.linspace(data['theta_min'], data['theta_max'], data['theta_num'])
-    except: t = np.linspace(0, 90, 101)
-    t[ t==0 ]=0.001
-    t[ t==90 ]=None
-
-    if plot_vs=='frequency':
-        x = freq = f
-        thet = np.array([ m.radians(data['theta_fix']) ])
-        xlab = 'Frequency (MHz)'
-    elif plot_vs == 'angle':
-        freq = np.array([ data['f_fix'] ])
-        x = thet = t
-        # x = np.sin(np.radians(x))
-        xlab = 'θ (°)'
-    elif plot_vs == 'angle_and_frequency':
-        # x = thet = t
-        # y = freq = f
-        x = [t,f]
-    R = np.ndarray( (len(freq), len(thet)), dtype=float )
-    T = np.ndarray( (len(freq), len(thet)), dtype=float )
-
-    for i, omega in enumerate(2.0*np.pi*freq):
-        lp = init_lp(data, omega=omega)
-        # lp = init_layers_prop(data, lm, layers_prop, omega=omega)
-        for j, angle in enumerate(thet):
-            c = lp[1][0]
-            alpha = lp[5][0]
-            norm_s = 1/c + 1j*alpha/omega
-            s1 = norm_s*m.sin(m.radians(angle))
-            S = waves.scattering_matrix(omega, s1, data['unit_cells'], *lp)
-            # displacement coefficients
-            r = S[int(S.shape[0]/2),0] # rLL
-            t = S[0,0]                 # tLL
-            # energy coefficients
-            # lp = (d, CL, CT, rhoL, rhoT, alphaL, alphaT)
-            Coeff = lp[3][-1]*lp[3][0]
-            Coeff = 1
-            R[i,j] = np.abs(r)**2 # RLL
-            T[i,j] = Coeff*np.abs(t)**2 # TLL
+    return freq_vec, R, T
 
 
-    # display
-    if R.shape[0]==1 or R.shape[1]==1:
-        R, T = [ u.reshape( (len(x),) ) for u in [R,T] ]
-        fig1, ax1 = plot1d(x, R, T, phase)
-        if phase==True:
-            ax1[1].set_xlabel(xlab, fontsize=12)
-        else:
-            plt.xlabel(xlab, fontsize=12)
-        if len(data['layers'].keys()) == 1:
-            key = [ u for u in data['layers'] ][0]
-            layerprop = data['layers'][key]
-            if layerprop[0]=='meta':
-                layername = data['layers'][key][0] + '('
-                layername = layername \
+
+def rt_versus_theta(data):
+    theta_vec    = np.linspace(data['theta_min'], data['theta_max'], data['theta_num'])
+    freq         = [ data['f_fix'] ]
+    left         = (data['halfspace_left'], None) # None thickness
+    right        = (data['halfspace_right'], None) # None thickness
+    lay          = list(data['layers'].values()) # unpacked layers configuration
+    stack_config = [left, *lay, right]
+    stack_list   = compute.stacks(freq, stack_config)
+    R, T = compute.rt(freq, theta_vec, stack_list , pola='LL')
+    fig, ax = plot1d(theta_vec, R, T, phase=False)
+    plt.xlabel('Angle (°C)', fontsize=12)
+    title = get_infos_for_title(data)
+    fig.suptitle(title, fontsize=14, fontweight='bold')
+
+    return theta_vec, R, T
+
+
+
+def get_infos_for_title(data):
+    if len(data['layers'].keys()) == 1:
+        key = [ u for u in data['layers'] ][0]
+        layerprop = data['layers'][key]
+        if layerprop[0]=='meta':
+            layername = data['layers'][key][0] + '('
+            layername = layername \
                     + str(layerprop[1]) + ' mm,' \
                     + str(layerprop[2]) + '+' + str(layerprop[3]) + ', ' \
                     + str(layerprop[4]) + ", " \
                     + str(layerprop[5]) + ", " \
                     + str(layerprop[6]) + ")"
-                layername = '| ' + layername + ' |'
-            else:
-                layername = data['layers'][key][0] + '(' + str(layerprop[1]) + ' mm)'
+            layername = '| ' + layername + ' |'
         else:
-            layername = "░░"
-        titlefig = '{} {} {}' . format(data['halfspace_left'],layername,data['halfspace_right'])
-        fig1.suptitle(titlefig, fontsize=14, fontweight='bold')
+            layername = data['layers'][key][0] + '(' + str(layerprop[1]) + ' mm)'
     else:
-        ax1 = plot2d(x[1], x[2], R, T)
+        layername = "░░"
 
-    return x, R, T, ax1
+    return '{} {} {}' . format(data['halfspace_left'],layername,data['halfspace_right'])
 
-    # }}}
+
 
 def plot1d(x, R, T, phase=False):
     if phase==False:
@@ -239,8 +207,11 @@ def plot1d(x, R, T, phase=False):
         ax1[1].plot(x,np.angle(R)/np.pi,color='magenta')
         ax1[1].plot(x,np.angle(T)/np.pi,color='cyan')
         ax1[1].set_ylabel('phase/$\pi$', fontsize=12)
-    plt.yscale("log")
+
+    plt.ylim(0,1)
+    plt.yscale("linear")
     return fig1, ax1
+
 
 
 def plot2d(x, y, R, T, phase=False):
