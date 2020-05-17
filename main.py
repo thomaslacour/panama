@@ -15,6 +15,7 @@ if len(sys.argv)==2 and sys.argv[1][-3:]=='txt':
     do = data["todo"] if data["todo"] is not None else 0 # assign default action
     result = action.process_config(data) # computation
     action.save_as_csv(result, "data.csv")
+    plt.yscale('log')
     plt.show()
 
 else:
