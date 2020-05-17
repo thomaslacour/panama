@@ -4,7 +4,9 @@ rt.py - coefficients de transmission et de réflexion.
 Synopsis
 --------
 
+```
 python rt.py
+```
 
 Dependence
 ----------
@@ -40,7 +42,7 @@ src/
 
 Le fichier `main.py` est le programme principal à exécuter avec python.
 La configuration est spécifiée dans le fichier texte `conf.txt`.
-Le code de calcul s'appuie sur l'utilisation de la base de données de matériaux "db.py" du module `material` ainsi que sur le module "mst" ("multiple scattering theory") pour le calcul des propriétés dynamiques effectives d'un milieu hétérogène.
+Le code de calcul s'appuie sur l'utilisation de la base de données de matériaux `db.py` du module `material` ainsi que sur le module `mst` ("multiple scattering theory") pour le calcul des propriétés dynamiques effectives d'un milieu hétérogène.
 L'exécution du code produit un fichier `data.csv` contenant les résultats de la simulation sous la forme d'un tableau.
 
 Configuration
@@ -57,8 +59,7 @@ parametre3=valeur3
 ```
 
 Toute ligne commençant par `#` est considérée comme un commentaire et ne sera pas interprétée par le programme.
-
-Les unités possibles pour les paramètres sont un seul choix parmi : 
+Les unités possibles pour les paramètres sont un seul choix parmi :
 
 - MHz, mm et µs
 - kHz, m et ms
@@ -75,14 +76,13 @@ layer#2 = {nom_du_materiaux2: épaisseur 2}
 layer#N = {nom_du_materiauxN: épaisseur N}
 ```
 
-Dans le cas d'un milieu hétérogène, les propriétés effectives seront calculées avec le code d'homogénéisation "mst". Le nom du matériau est obligatoirement "meta" et la syntaxe à respecter est la suivante :
+Dans le cas d'un milieu hétérogène, les propriétés effectives seront calculées avec le code d'homogénéisation `mst`. Le nom du matériau est obligatoirement *meta* et la syntaxe à respecter est la suivante :
 
 ```
 layer#3 = {meta: épaisseur, Mat: matrice, Inc: inclusion, rmean: rayon, phi: fraction_volumique_en_%, poly: polydispersité_en_%}
 ```
 
-Les valeurs "matrice" et "inclusion" sont des chaînes de caractères, "rayon" est un nombre.
-
+Les valeurs *matrice* et *inclusion* sont des chaînes de caractères, *rayon* est un nombre.
 Les matériaux disponibles par défaut sont :
 
 > alu, eau, PU, air, acier ou Silicone_poreux.
@@ -112,7 +112,7 @@ theta_fix = nombre
 theta_num = nombre
 ```
 
-Selon le calcul demandé, tous les paramètres ne sont pas nécessaires (voir exemple). Pour calculer les valeurs des coefficients R et/ou T en incidence normale, seul "theta\_fix" est requis avec "f\_min", "f\_max" et "f\_num".
+Selon le calcul demandé, tous les paramètres ne sont pas nécessaires (voir exemple). Pour calculer les valeurs des coefficients R et/ou T en incidence normale, seul *theta\_fix* est requis avec *f\_min*, *f\_max* et *f\_num*.
 
 Actions
 -------
@@ -123,15 +123,12 @@ Un seul choix est possible parmi différentes actions. La syntaxe est alors la s
 todo = action
 ```
 
-La valeur "action" peut être un nombre ou une suite de plusieurs caractères. L'ensemble des actions possibles est implémenté dans le fichier "rt.py" (voir architecture). Les actions possibles sont :
+La valeur *action* peut être un nombre ou une suite de plusieurs caractères. L'ensemble des actions possibles est implémenté dans le fichier `rt.py` (voir architecture). Les actions possibles sont :
 
 - `todo=0` : calcule de R et T en fonction de la fréquence,
-
 - `todo=1` : calcule de R et T en fonction de l'angle d'incidence,
-
 - `todo=2` : calcule de R et T en fonction de l'angle d'incidence et de la fréquence,
-
-- `todo=PROPN` : calcule des propriétés mécanique d'une couche particulière, où `N` désigne le numéro de la couche (layer\#N). Renvoie de la célérité de phase, de l'atténuation, de la masse volumique, de l'impédance et du module élastique en sortie.
+- `todo=PROPN` : calcule des propriétés mécanique d'une couche particulière, où `N` désigne le numéro de la couche (`layer\#N`). Renvoie de la célérité de phase, de l'atténuation, de la masse volumique, de l'impédance et du module élastique en sortie.
 
 Examples
 --------
